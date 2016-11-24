@@ -54,7 +54,7 @@ JavaScript 脚本代码
 ---
 
 - 使用严格模式 'use static'，严格模式可以消除JavaScript代码中一些不合理的地方，提高安全性，加速浏览器的编译速度，也对程序员代码风格有规范作用。关于严格模式和普通模式的区别，可以参考其他文档的说明
-    ```JavaScript
+    ```javascript
     // IIFE模块中的写法
     (function(window, document) {
         'use strict';
@@ -68,7 +68,7 @@ JavaScript 脚本代码
     }
     ```
 - 不要在循环体里面定义变量
-    ```JavaScript
+    ```javascript
     // 在循环体外面定义变量，也不用在循环体里面多次获取array的长度
     var msg = "Message";
     for (var i = 0, length = array.length; i < length; i++) {
@@ -82,7 +82,7 @@ JavaScript 脚本代码
     }
     ```
 - 多次使用的全局变量使用局部变量保存起来，全局变量查找会很慢
-    ```JavaScript
+    ```javascript
     // 使用局部变量保存全局变量
     var location = window.location;
     console.log(location.href);
@@ -93,7 +93,7 @@ JavaScript 脚本代码
     console.log(window.location.host);
     ```
 - 在不影响代码阅读和理解的前提下减少冗余代码
-    ```JavaScript
+    ```javascript
     // 一般写法
     function max(a, b) {
     	if (a > b) {
@@ -117,7 +117,7 @@ JavaScript 脚本代码
     }
     ```
 - 在使用自有属性的时候使用hasOwnProperty，typeof检查，防止报错
-    ```JavaScript
+    ```javascript
     // hasOwnProperty
     for (var variable in object) {
         if (object.hasOwnProperty(variable)) {
@@ -131,7 +131,7 @@ JavaScript 脚本代码
     }
     ```
 - 使用memorize()编程技巧，缓存结果
-    ```JavaScript
+    ```javascript
     // 在参数一致的情况下返回一样的结果时，可以使用memorize
     function memorize(f) {
     	var cache = {}; //将值存在闭包中
@@ -151,7 +151,7 @@ JavaScript 脚本代码
     // 或者
     ```
 - 使用Promises防止回调地狱， [原文地址](https://developers.google.com/web/fundamentals/getting-started/primers/promises)
-    ```JavaScript
+    ```javascript
     // Google developer 中关于promise的示范例子
     var promise = new Promise(function (resolve, reject) {
     	// 做某些事情
