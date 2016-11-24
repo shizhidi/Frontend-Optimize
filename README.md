@@ -6,7 +6,7 @@ Web前端性能优化总结
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同时也提醒大家，过早地优化是万恶的源泉，对项目合理的规划才能充分的提高效率。
 
-Thanks<br/>
+Thanks  
 小丘
 基本原理
 ---
@@ -53,7 +53,7 @@ Cache 缓存／Storage 存储
 JavaScript 脚本代码
 ---
 
-- 使用严格模式 'use static'，严格模式可以消除JavaScript代码中一些不合理的地方，提高安全性，加速浏览器的编译速度，也对程序员代码风格有规范作用。关于严格模式和普通模式的区别，可以参考其他文档的说明
+- 使用严格模式 'use strict'，严格模式可以消除JavaScript代码中一些不合理的地方，提高安全性，加速浏览器的编译速度，也对程序员代码风格有规范作用。关于严格模式和普通模式的区别，可以参考其他文档的说明
     ```javascript
     // IIFE模块中的写法
     (function(window, document) {
@@ -135,26 +135,44 @@ JavaScript 脚本代码
     }
     ```
 
-- 使用memorize()编程技巧，缓存结果
+- 使用memorize()编程技巧，缓存结果，可以用Node运行代码测试效果
     ```javascript
     // 在参数一致的情况下返回一样的结果时，可以使用memorize
     function memorize(f) {
     	var cache = {}; //将值存在闭包中
     	return function () {
     		var key = arguments.length + Array.prototype.join.call(arguments, ",");
+    		// console.log("key",key);
     		if (key in cache) {
     			return cache[key];
     		} else {
-    			return cache[key] = f.apply(this, arguments);
+    			cache[key] = f.apply(this, arguments);
+    			return cache[key];
     		}
-    	}
+    	};
     }
-    // 改造后的函数
-    var memFun=memorize(function (args) {
-        // body...
-    });
-    // 或者
+    // 斐波那契数列
+    var fibonacci = function (n) {
+        return n < 2 ? n: fibonacci(n - 1) + fibonacci(n - 2);
+    };
+
+    // 普通fibonacci的时间
+    console.time("普通fibonacci的时间");
+    console.log("结果：" + fibonacci(40));
+    console.timeEnd("普通fibonacci的时间");
+
+    // 使用memorize优化过fibonacci的时间
+    var fibonacci = memorize(fibonacci);
+    console.time("优化过fibonacci的时间");
+    console.log("结果：" + fibonacci(40));
+    console.timeEnd("优化过fibonacci的时间");
     ```
+
+    > 结果：102334155  
+    > 普通fibonacci的时间: 1714.656ms  
+    > 结果：102334155  
+    > 优化过fibonacci的时间: 1.001ms  
+
 
 - 使用Promises防止回调地狱， [原文地址](https://developers.google.com/web/fundamentals/getting-started/primers/promises)
     ```javascript
