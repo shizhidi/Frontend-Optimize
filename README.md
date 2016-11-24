@@ -67,6 +67,7 @@ JavaScript 脚本代码
         // body...
     }
     ```
+
 - 不要在循环体里面定义变量
     ```javascript
     // 在循环体外面定义变量，也不用在循环体里面多次获取array的长度
@@ -81,6 +82,7 @@ JavaScript 脚本代码
     	console.log(array[i], msg);
     }
     ```
+
 - 多次使用的全局变量使用局部变量保存起来，全局变量查找会很慢
     ```javascript
     // 使用局部变量保存全局变量
@@ -92,6 +94,7 @@ JavaScript 脚本代码
     console.log(window.location.href);
     console.log(window.location.host);
     ```
+
 - 在不影响代码阅读和理解的前提下减少冗余代码
     ```javascript
     // 一般写法
@@ -116,6 +119,7 @@ JavaScript 脚本代码
     	return a > b ? a : b;
     }
     ```
+
 - 在使用自有属性的时候使用hasOwnProperty，typeof检查，防止报错
     ```javascript
     // hasOwnProperty
@@ -130,6 +134,7 @@ JavaScript 脚本代码
         // body...
     }
     ```
+
 - 使用memorize()编程技巧，缓存结果
     ```javascript
     // 在参数一致的情况下返回一样的结果时，可以使用memorize
@@ -150,6 +155,7 @@ JavaScript 脚本代码
     });
     // 或者
     ```
+
 - 使用Promises防止回调地狱， [原文地址](https://developers.google.com/web/fundamentals/getting-started/primers/promises)
     ```javascript
     // Google developer 中关于promise的示范例子
@@ -184,6 +190,7 @@ CSS 样式
   element.style.color = "black";
   element.style.fontSize = "14px";
   ```
+
 - 不要使用CSS中的 _@import_ 来加载.css文件，需要的样式应该提前合并成一个文件
 - 减少offsetXXX,scrollXXX,clientXXX的获取，这些方法会导致浏览器的重绘
 - 使用CSS开启GPU加速，提升性能，CSS在做动画的时候，默认是没有使用GPU的，在进行3D变化的时候，才会使用GPU加速，这时候我们可以使用一些技巧，强制开启GPU加速2D的动画，以下两种方法都能开启GPU加速。
@@ -206,6 +213,7 @@ CSS 样式
         transform: translate3d(0,0,0);
     }
     ```
+
 - 小型的.css文件，可以直接以内联样式的形式，写到.html文件中，减少.css文件的请求，不过这样会造成
 
 HTML 标签
@@ -230,6 +238,7 @@ HTML 标签
     <meta http-equiv="x-dns-prefetch-control" content="on" />
     <link rel="dns-prefetch" href="http://cdn.domain.com" />
     ```
+
 - HTTP/2.0
 - SPDY
 - TCP Fast Open
