@@ -36,22 +36,29 @@ Cache 缓存／Storage 存储
 ---
 
 - Headers设置浏览器缓存
-  - "Expires" 设置缓存的过期时间，超过这个时间强制发起请求，不管其他的Etag，last-modified是否一致
-  - "Cache-Control" : "max-age=200"，与Expires作用一样，但是Cache-Control功能更多,可以设置no-cache等等
-  - "last-modified" : 指的是文件上一次被修改的时间，如果时间与缓存文件的时间不一致，则会发起完整的请求
-  - "Etag" : 文件的一个"指纹"，如果Etag没有变化，则返回304状态码，如果不一致则发起完整的请求，使用CDN的时候有时候会造成Etag不一致，此时要避免使用Etag
-  - last-modified 和 Expires 要配合着使用
-  - Etag 和 Expires 要配合着使用
+    - "Expires" 设置缓存的过期时间，超过这个时间强制发起请求，不管其他的Etag，last-modified是否一致
+    - "Cache-Control" : "max-age=200"，与Expires作用一样，但是Cache-Control功能更多,可以设置no-cache等等
+    - "last-modified" : 指的是文件上一次被修改的时间，如果时间与缓存文件的时间不一致，则会发起完整的请求
+    - "Etag" : 文件的一个"指纹"，如果Etag没有变化，则返回304状态码，如果不一致则发起完整的请求，使用CDN的时候有时候会造成Etag不一致，此时要避免使用Etag
+    - last-modified 和 Expires 要配合着使用
+    - Etag 和 Expires 要配合着使用
 - Cookies
-- LocalStorage
-- sessionStorage
-- IndexDB
-- Web SQL
-- Cache Storage
-- Application Cache
+    - 设置cookie的过期时间expires，合理利用cookie可以实现用户免登录的功能，在流程上减少操作
+    - 压缩cookie的大小，减少不必要的cookie
+    - cookie的domain级别要设置合理
+    - 静态的资源就不要使用cookie了，减少不必要的数据量
+- Web Storage 包括sessionStorage，localStorage，IndexDB，Web SQL，根据业务逻辑，存储需要的数据，但由于都是HTML5的标准，所以还有些兼容性的问题。
+- Cache 包括Application Cache和Cache Storage，利用浏览器的应用缓存功能，可以完成离线应用的制作，一个完全离线的App，自然对服务器没有压力
+- websocket 根据自己的业务合理的使用websocket替换掉Ajax，JSONP，传输性能好于HTTP，传输数据量也会少很多
 
 JavaScript 脚本代码
 ---
+
+- 把JavaScript脚本放在页面的底部或者使用defer属性进行延时下载，因为JavaScript脚本的下载，会阻塞其他资源的下载，也会阻塞浏览器的渲染，defer可以用于内联的script标签，也可以用于外部的script，在HTML5中增加了一个async异步下载功能，只能用于外部的script，异步下载的脚本在下载的过程中，不会阻挡浏览器渲染其他元素，下载完之后再立即执行，注意的是，这里的async和JSONP中的async，不是一回事
+    ```html
+    <script type="text/javascript" defer="defer"></script>
+    <script type="text/javascript" src="main.js" async="async"></script>
+    ```
 
 - 使用严格模式 'use strict'，严格模式可以消除JavaScript代码中一些不合理的地方，提高安全性，加速浏览器的编译速度，也对程序员代码风格有规范作用。关于严格模式和普通模式的区别，可以参考其他文档的说明
     ```javascript
@@ -142,7 +149,6 @@ JavaScript 脚本代码
     	var cache = {}; //将值存在闭包中
     	return function () {
     		var key = arguments.length + Array.prototype.join.call(arguments, ",");
-    		// console.log("key",key);
     		if (key in cache) {
     			return cache[key];
     		} else {
@@ -237,21 +243,40 @@ CSS 样式
 HTML 标签
 ---
 
-- Item 1
-- Item 2
-- Item 3
+- 延时加载 非首屏的图片元素，可以延时加载，例如使用lazyLoad技术，在用户滚动屏幕的时候，再启用下载，减少服务器压力
+    ```javascript
+    var imgs = document.getElementsByTagName('img');
+    // 获取视口高度与滚动条的偏移量
+    function lazyload() {
+    	var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    	var viewportSize = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    	for (var i = 0; i < imgs.length; i++) {
+    		var x = scrollTop + viewportSize - imgs[i].offsetTop;
+    		if (x > 0) {
+    			imgs[i].src = imgs[i].getAttribute('loadpic');
+    		}
+    	}
+    }
+    ```
+- 预先加载 预测用户行为，在页面渲染完毕后可以预先加载下一个页面需要的内容
+    - 搜索引擎首页打开后，可以预先下载搜索结果页面的需要的内容
+    - 在线看小说，可以预先下载下一个章节的文字，图片等
+    - 流程类的，在Step 1 渲染结束后，可以预先下载Step 2 的内容
+- 减少Dom节点的数量
 
 网络优化
 ---
 
 - 添加Accept-Encoding头，减少浏览器判断Encoding的时间
-- 开启服务器gzip压缩文件大小
+- 开启服务器Gzip压缩文件大小，一般能获得70%以上的压缩效果，速度提升非常明显，不过对于小于1k的资源不建议压缩，意义不大而且增加服务器的负担，静态文件可以在服务器设置预先Gzip压缩缓存，不用每次请求都压缩一次
 - 使用JSON代替XML传输数据
-- 避免404的产生
+- 避免404的产生，favicon.icon 是一定要存在的
 - 使用keep-alive
-- CDN
+- 使用flush，让页面尽早的输出，让页面分块的显示
+- CDN 将静态的资源放在CDN上面，可以减少用户下载的时间，更能节省服务器宝贵的带宽，更可以根据用户的网络情况，自动选择合适的网络运营商下载静态资源，提高用户的访问速度
 - DNS
-    - DNS预解析
+    - 根据浏览器对每个域名的并行线程数（一般为6个），设置更多的域名，最大化并发的下载树，不过一般两三个域名为佳，过多的域名，会增加DNS查询带来的延时
+    - DNS预解析，可以对未来需要使用的域名进行预先的解析
     ```html
     <meta http-equiv="x-dns-prefetch-control" content="on" />
     <link rel="dns-prefetch" href="http://cdn.domain.com" />
