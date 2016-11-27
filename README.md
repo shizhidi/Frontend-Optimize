@@ -54,7 +54,7 @@ Cache 缓存／Storage 存储
 JavaScript 脚本代码
 ---
 
-- 把JavaScript脚本放在页面的底部或者使用defer属性进行延时下载，因为JavaScript脚本的下载，会阻塞其他资源的下载，也会阻塞浏览器的渲染，defer可以用于内联的script标签，也可以用于外部的script，在HTML5中增加了一个async异步下载功能，只能用于外部的script，异步下载的脚本在下载的过程中，不会阻挡浏览器渲染其他元素，下载完之后再立即执行，注意的是，这里的async和JSONP中的async，不是一回事
+- 把JavaScript脚本放在页面的底部或者使用defer属性进行延时下载，因为JavaScript脚本的下载，会阻塞其他资源的下载，也会阻塞浏览器的渲染，defer可以用于内联的script标签，也可以用于外部的script，在HTML5中增加了一个async异步下载功能，只能用于外部的script，异步下载的脚本在下载的过程中，不会阻挡浏览器渲染其他元素，下载完之后再立即执行。当延时下载的JavaScript文件中有Dom元素操作的时候，使用这种方法，可能造成页面闪烁问题，也会造成多次的重绘，注意合理编写代码。另外需要注意的是，这里的async和JSONP中的async，不是一回事。
     ```html
     <script type="text/javascript" defer="defer"></script>
     <script type="text/javascript" src="main.js" async="async"></script>
@@ -263,17 +263,44 @@ HTML 标签
     - 在线看小说，可以预先下载下一个章节的文字，图片等
     - 流程类的，在Step 1 渲染结束后，可以预先下载Step 2 的内容
 - 减少Dom节点的数量
+- 比较小的文件，又做不了Sprit的时候，可以考虑通过base64转码之后，写在代码里面，减少一次请求
+    ```css
+    background: url(data:image/png;base64,)
+    ```
 
 网络优化
 ---
 
+- 符合HTTP规范的用法，例如GET是用来获取数据等，POST是用来发送数据的，GET相对于POST速度会更快，减少了Header的部分，POST相对GET能发送更大的数据
 - 添加Accept-Encoding头，减少浏览器判断Encoding的时间
 - 开启服务器Gzip压缩文件大小，一般能获得70%以上的压缩效果，速度提升非常明显，不过对于小于1k的资源不建议压缩，意义不大而且增加服务器的负担，静态文件可以在服务器设置预先Gzip压缩缓存，不用每次请求都压缩一次
 - 使用JSON代替XML传输数据
 - 避免404的产生，favicon.icon 是一定要存在的
 - 使用keep-alive
-- 使用flush，让页面尽早的输出，让页面分块的显示
-- CDN 将静态的资源放在CDN上面，可以减少用户下载的时间，更能节省服务器宝贵的带宽，更可以根据用户的网络情况，自动选择合适的网络运营商下载静态资源，提高用户的访问速度
+- 在后端服务器中使用flush，刷新缓冲区，让页面尽早的输出，让页面分块的显示，例如在php, JSP中可以这么使用
+    ```php
+    // PHP
+    </head>  
+    <?php flush(); ?>  
+    // 将Head部分的标签先输出到浏览器上面，提早.css文件,.js文件下载的时间
+    <body>  
+    ```
+
+    ```jsp
+    <!-- JSP -->
+    <jsp:include page="included.html" flush="true" />
+    ```
+
+- CDN
+    - 将静态的资源放在CDN上面，可以减少用户下载的时间，更能节省服务器宝贵的带宽，更可以根据用户的网络情况，自动选择合适的网络运营商下载静态资源，提高用户的访问速度
+    - 使用公共CDN中的.js文件，例如某个版本的jQuery，内容是一样的，在用户访问别的网站缓存下来的.js文件，在自己的网站上也可以使用。不过这样会丢失掉代码的可控性，有一定的风险，当Google无法访问的时候，Google提供的CDN文件，也无法访问了，缺少了代码库的支持，网站会出现重大的问题。这时候可以添加以下代码，这样就提供了一个备选的方案，当Google的CDN无法使用的时候，去调用Microsoft的CDN
+    ```html
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.x.x/jquery.min.js"></script>
+    <script type="text/javascript">
+    !window.jQuery && document.write('<script src=http://ajax.microsoft.com/ajax/jquery/jquery-1.x.x.min.js><\/script>');
+    </script>
+    ```
+    - 也有很多人提出过，在浏览器中内置常用的.js库文件，但并没有被纳入w3c标准中
 - DNS
     - 根据浏览器对每个域名的并行线程数（一般为6个），设置更多的域名，最大化并发的下载树，不过一般两三个域名为佳，过多的域名，会增加DNS查询带来的延时
     - DNS预解析，可以对未来需要使用的域名进行预先的解析
