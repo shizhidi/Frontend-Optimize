@@ -202,7 +202,7 @@ JavaScript 脚本代码
 CSS 样式
 ---
 
-- 删除无用的CSS样式，例如删除行内元素的中关于块级元素的属性，
+- 删除无用的CSS样式，例如删除行内元素的中关于块级元素的属性
 - 使用.Class来改变样式，避免使用element.style的方法来改变样式，因为在有多个element.style操作的时候，会产生多次的重绘，.Class只是会发生一次重绘。实在必须使用element.style方法的时候，可以使用以下方法，减少重绘次数
   ```javascript
   // 好的例子，发生一次重绘
@@ -258,6 +258,7 @@ HTML 标签
     	}
     }
     ```
+
 - 预先加载 预测用户行为，在页面渲染完毕后可以预先加载下一个页面需要的内容
     - 搜索引擎首页打开后，可以预先下载搜索结果页面的需要的内容
     - 在线看小说，可以预先下载下一个章节的文字，图片等
@@ -280,10 +281,14 @@ HTML 标签
 - 在后端服务器中使用flush，刷新缓冲区，让页面尽早的输出，让页面分块的显示，例如在php, JSP中可以这么使用
     ```php
     // PHP
-    </head>  
-    <?php flush(); ?>  
+    <head>
+        <!-- css, js, meta -->
+    </head>
     // 将Head部分的标签先输出到浏览器上面，提早.css文件,.js文件下载的时间
-    <body>  
+    <?php flush(); ?>  
+    <body>
+        <!-- body -->
+    </body>
     ```
 
     ```jsp
@@ -294,20 +299,21 @@ HTML 标签
 - CDN
     - 将静态的资源放在CDN上面，可以减少用户下载的时间，更能节省服务器宝贵的带宽，更可以根据用户的网络情况，自动选择合适的网络运营商下载静态资源，提高用户的访问速度
     - 使用公共CDN中的.js文件，例如某个版本的jQuery，内容是一样的，在用户访问别的网站缓存下来的.js文件，在自己的网站上也可以使用。不过这样会丢失掉代码的可控性，有一定的风险，当Google无法访问的时候，Google提供的CDN文件，也无法访问了，缺少了代码库的支持，网站会出现重大的问题。这时候可以添加以下代码，这样就提供了一个备选的方案，当Google的CDN无法使用的时候，去调用Microsoft的CDN
-    ```html
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.x.x/jquery.min.js"></script>
-    <script type="text/javascript">
-    !window.jQuery && document.write('<script src=http://ajax.microsoft.com/ajax/jquery/jquery-1.x.x.min.js><\/script>');
-    </script>
-    ```
+        ```html
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.x.x/jquery.min.js"></script>
+        <script type="text/javascript">
+        !window.jQuery && document.write('<script src=http://ajax.microsoft.com/ajax/jquery/jquery-1.x.x.min.js><\/script>');
+        </script>
+        ```
+
     - 也有很多人提出过，在浏览器中内置常用的.js库文件，但并没有被纳入w3c标准中
 - DNS
     - 根据浏览器对每个域名的并行线程数（一般为6个），设置更多的域名，最大化并发的下载树，不过一般两三个域名为佳，过多的域名，会增加DNS查询带来的延时
     - DNS预解析，可以对未来需要使用的域名进行预先的解析
-    ```html
-    <meta http-equiv="x-dns-prefetch-control" content="on" />
-    <link rel="dns-prefetch" href="http://cdn.domain.com" />
-    ```
+        ```html
+        <meta http-equiv="x-dns-prefetch-control" content="on" />
+        <link rel="dns-prefetch" href="http://cdn.domain.com" />
+        ```
 
 - HTTP/2.0
 - SPDY
