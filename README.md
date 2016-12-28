@@ -278,7 +278,23 @@ HTML 标签
 - 使用JSON代替XML传输数据
 - 避免404的产生，favicon.icon 是一定要存在的
 - 使用keep-alive
-- 在后端服务器中使用flush，刷新缓冲区，让页面尽早的输出，让页面分块的显示，例如在php, JSP中可以这么使用
+- 在后端服务器中使用flush，刷新缓冲区，让页面尽早的输出，包括让Head部提前输出，下载样式和脚本文件，让首页可视的部分提前输出给用户，例如在node.js，php, JSP中可以这么使用
+  ```javascript
+  // Node.js
+  var http = require('http');
+
+  http.createServer(function (request, response) {
+  	// 先把Head部分输出，浏览器会下载CSS文件，js文件
+  	response.write('<html><head><title>Title</title><script>alert("Head加载完毕！")</script></head>');
+
+  	// 处理完body部分再输出，这里为了举例子，设置10秒之后响应
+  	setTimeout(function () {
+  		response.write('<body><script>alert("10s后body加载完毕！")</script></body></html>');
+  		response.end();
+  	}, 10000);
+  }).listen(8888);
+  ```
+
   ```php
   // PHP
   <head>
