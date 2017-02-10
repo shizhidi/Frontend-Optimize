@@ -334,7 +334,9 @@ HTML 标签
 - HTTP/2.0
 - SPDY
 - TCP Fast Open
-- hybla htcp发包算法
+- hybla htcp拥塞控制算法，适用在延迟低的环境
+- Google TCP BBR 拥塞控制算法
+  这个BBR拥塞控制算法，能极大的提高网站的下载速度，适用在延迟比较高低地方，例如国外低服务器，需要更新Linux kernel 4.9 内核
 - 增加服务器并发连接数
   ```shellscript
   * soft nofile 51200
@@ -353,3 +355,4 @@ HTML 标签
 - Google PageSpeed
 - Google Developer
 - Mozilla Developer Network
+- Github Google BBR
