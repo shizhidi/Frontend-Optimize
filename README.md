@@ -87,6 +87,38 @@ JavaScript 脚本代码
   // 暂时不支持箭头函数和generator一起的写法，辣鸡
   const asyncFunc = function *() { yield ajax.post(); }
   ```
+- 无副作用的函数（side effect），函数式编程强调没有"副作用"，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。
+  ```javascript
+  function func(argv) {
+    let temp = argv;
+    // 修改temp的值，不对argv的值做修改
+    return temp;
+  }
+  ```
+- 函数式编程有个概念，就是不修改外部的系统状态以及引用的透明，就是说不依赖也不修改外部的系统状态，函数就是用来返回的。
+  ```javascript
+  // 错误示范，不要用函数来修改外部的系统状态
+  let status = 1;
+  let subStatus = 2;
+  function func() {
+    // 这里引用了外部的系统状态，又修改了外部的系统状态，让代码难以维护
+    status = subStatus;
+  }
+  ```
+- 更接近于自然语言的编程，能让代码更容易维护
+  ```javascript
+  // 显然自然语言的函数，会比直接代码编写，在复杂的场景下，更让人能够看懂
+  const result = (((100 + 2) * 3) - 9) ** 2;
+  const result = pow((minus(multiply(add(100, 2), 3), 9)), 2);
+  // 结合下文中的pipeline，单向的数据流，能写出更容易理解的代码
+  const result = pipeline(
+    100,
+    add(2),
+    multiply(3),
+    minus(9),
+    pow(2)
+  );
+  ```
 - 使用函数式编程的方法，能够更好的组织代码的逻辑，例如pipeline的方法，不用将每一次的结果都用数据保存，不用函数嵌套，逻辑更清晰。
   ```javascript
   const pipeline = (...args) => args.reduce((l, r) => r(l));
