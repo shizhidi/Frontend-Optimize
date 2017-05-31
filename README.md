@@ -87,7 +87,7 @@ JavaScript 脚本代码
   // 暂时不支持箭头函数和generator一起的写法，辣鸡
   const asyncFunc = function *() { yield ajax.post(); }
   ```
-- 无副作用的函数（side effect），函数式编程强调没有"副作用"，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。
+- 无副作用的函数（side effect），函数式编程强调没有"副作用"。
   ```javascript
   function func(argv) {
     let temp = argv;
@@ -95,7 +95,7 @@ JavaScript 脚本代码
     return temp;
   }
   ```
-- 函数式编程有个概念，就是不修改外部的系统状态以及引用的透明，就是说不依赖也不修改外部的系统状态，函数就是用来返回的。
+- 没有副作用，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。
   ```javascript
   // 错误示范，不要用函数来修改外部的系统状态
   let status = 1;
@@ -107,10 +107,17 @@ JavaScript 脚本代码
   ```
 - 更接近于自然语言的编程，能让代码更容易维护
   ```javascript
-  // 显然自然语言的函数，会比直接代码编写，在复杂的场景下，更让人能够看懂
+  // 这样的代码，多层嵌套，很难看懂，改一个数字都怕出错
   const result = (((100 + 2) * 3) - 9) ** 2;
+  // 显然自然语言的函数，会比直接代码编写，在复杂的场景下，更让人能够看懂，不过这样也是不够的，多层嵌套有也是有问题的
   const result = pow((minus(multiply(add(100, 2), 3), 9)), 2);
-  // 结合下文中的pipeline，单向的数据流，能写出更容易理解的代码
+  // 如果将每个步骤的结果保存下来，不用嵌套了，的确会容易维护很多，但是中间变量就太多了，起变量名字太让人痛苦
+  const temp1 = add(100, 2)；
+  const temp2 = multiply(temp1, 3);
+  const temp3 = minus(temp2, 9);
+  const temp4 = pow(temp3, 2);
+  
+  // 结合下文中的pipeline，单向的数据流，不用使用中间变量保存结果，能写出更容易理解的代码
   const result = pipeline(
     100,
     add(2),
