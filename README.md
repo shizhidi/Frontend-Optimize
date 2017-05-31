@@ -74,19 +74,42 @@ JavaScript 脚本代码
     // body...
   }
   ```
+- 按需加载，如果使用ES6，以及Webpack打包，可以使用异步加载模块的方法，加载需要的资源，不用将所有的资源都打包到一个文件里。
+  ```javascript
+  const util = () => import '../lib/Util';
+  ```
+- 使用ES7 的语法 async／await 将异步代码，变为同步的逻辑，避免回调嵌套，能让代码逻辑更清晰（现阶段需要使用babel等工具转换），async／await其实是Generators的语法糖。
+  ```javascript
+  // ES7 写法
+  const asyncFunc = async () => await ajax.post();
+  // ES6 写法
+  // 暂时不支持箭头函数和generator一起的写法，辣鸡
+  const asyncFunc = function *() => yield ajax.post();
+  ```
+- 使用函数式编程的方法，能够更好的组织代码的逻辑，例如pipeline的方法，不用将每一次的结果都用数据保存，不用函数嵌套，逻辑更清晰。
+  ```javascript
+  const pipeline = (...args) => args.reduce((l, r) => r(l));
 
+  // example
+  const plusOne = (x) => x + 1;
+  const minusTwo = (x) => x - 2;
+  const multiplyThree = (x) => x * 3;
+
+  const result = pipeline(1, plusOne, plusOne, minusTwo, multiplyThree);
+  console.log(result); //结果为 3
+  ```
 - 不要在循环体里面定义变量
   ```javascript
   // 在循环体外面定义变量，也不用在循环体里面多次获取array的长度
   var msg = "Message";
   for (var i = 0, length = array.length; i < length; i++) {
-  	console.log(array[i], msg);
+    console.log(array[i], msg);
   }
 
   // 以下为错误示范
   for (var i = 0; i < array.length; i++) {
-  	var msg = "Message";
-  	console.log(array[i], msg);
+    var msg = "Message";
+    console.log(array[i], msg);
   }
   ```
 
@@ -106,24 +129,24 @@ JavaScript 脚本代码
   ```javascript
   // 一般写法
   function max(a, b) {
-  	if (a > b) {
-  		return a;
-  	} else {
-  		return b;
-  	}
+    if (a > b) {
+      return a;
+    } else {
+      return b;
+    }
   }
 
   // 简单写法 1 ，减少了else的书写
   function max(a, b) {
-  	if (a > b) {
-  		return a;
-  	}
-  	return b;
+    if (a > b) {
+      return a;
+    }
+    return b;
   }
 
   // 简单写法 2 ，使用三目运算
   function max(a, b) {
-  	return a > b ? a : b;
+    return a > b ? a : b;
   }
   ```
 
@@ -146,16 +169,16 @@ JavaScript 脚本代码
   ```javascript
   // 在参数一致的情况下返回一样的结果时，可以使用memorize
   function memorize(f) {
-  	var cache = {}; //将值存在闭包中
-  	return function () {
-  		var key = arguments.length + Array.prototype.join.call(arguments, ",");
-  		if (key in cache) {
-  			return cache[key];
-  		} else {
-  			cache[key] = f.apply(this, arguments);
-  			return cache[key];
-  		}
-  	};
+    var cache = {}; //将值存在闭包中
+    return function () {
+      var key = arguments.length + Array.prototype.join.call(arguments, ",");
+      if (key in cache) {
+        return cache[key];
+      } else {
+        cache[key] = f.apply(this, arguments);
+        return cache[key];
+      }
+    };
   }
   // 斐波那契数列
   var fibonacci = function (n) {
@@ -184,18 +207,18 @@ JavaScript 脚本代码
   ```javascript
   // Google developer 中关于promise的示范例子
   var promise = new Promise(function (resolve, reject) {
-  	// 做某些事情
-  	if ( /* 判断 */ ) {
-  		resolve("Stuff worked!");
-  	} else {
-  		reject(Error("It broke"));
-  	}
+    // 做某些事情
+    if ( /* 判断 */ ) {
+      resolve("Stuff worked!");
+    } else {
+      reject(Error("It broke"));
+    }
   });
 
   promise.then(function (result) {
-  	console.log(result); // 正确结果
+    console.log(result); // 正确结果
   }, function (err) {
-  	console.log(err); // 错误结果
+    console.log(err); // 错误结果
   });
   ```
 
@@ -221,20 +244,24 @@ CSS 样式
   ```css
    /* 使用 translateZ */
   .box1 {
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translatez(0);
+     -moz-transform: translatez(0);
+      -ms-transform: translatez(0);
+       -o-transform: translatez(0);
+          transform: translatez(0);
   }
 
   /* 使用 translate3d */
   .box2 {
-    -webkit-transform: translate3d(0,0,0);
-    -moz-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
   }
   ```
 
@@ -248,14 +275,14 @@ HTML 标签
   var imgs = document.getElementsByTagName('img');
   // 获取视口高度与滚动条的偏移量
   function lazyload() {
-  	var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-  	var viewportSize = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  	for (var i = 0; i < imgs.length; i++) {
-  		var x = scrollTop + viewportSize - imgs[i].offsetTop;
-  		if (x > 0) {
-  			imgs[i].src = imgs[i].getAttribute('loadpic');
-  		}
-  	}
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var viewportSize = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    for (var i = 0; i < imgs.length; i++) {
+      var x = scrollTop + viewportSize - imgs[i].offsetTop;
+      if (x > 0) {
+        imgs[i].src = imgs[i].getAttribute('loadpic');
+      }
+    }
   }
   ```
 
@@ -284,14 +311,14 @@ HTML 标签
   var http = require('http');
 
   http.createServer(function (request, response) {
-  	// 先把Head部分输出，浏览器会下载CSS文件，js文件
-  	response.write('<html><head><title>Title</title><script>alert("Head加载完毕！")</script></head>');
+    // 先把Head部分输出，浏览器会下载CSS文件，js文件
+    response.write('<html><head><title>Title</title><script>alert("Head加载完毕！")</script></head>');
 
-  	// 处理完body部分再输出，这里为了举例子，设置10秒之后响应
-  	setTimeout(function () {
-  		response.write('<body><script>alert("10s后body加载完毕！")</script></body></html>');
-  		response.end();
-  	}, 10000);
+    // 处理完body部分再输出，这里为了举例子，设置10秒之后响应
+    setTimeout(function () {
+      response.write('<body><script>alert("10s后body加载完毕！")</script></body></html>');
+      response.end();
+    }, 10000);
   }).listen(8888);
   ```
 
