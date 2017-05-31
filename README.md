@@ -120,10 +120,12 @@ JavaScript 脚本代码
   // 结合下文中的pipeline，单向的数据流，不用使用中间变量保存结果，能写出更容易理解的代码
   const result = pipeline(
     100,
-    add(2),
-    multiply(3),
-    minus(9),
-    pow(2)
+    (x) => add(x, 2),
+    (x) => multiply(x, 3),
+    (x) => minus(x, 9),
+    (x) => pow(x, 2),
+    parseInt,
+    JSON.stringify
   );
   ```
 - 使用函数式编程的方法，能够更好的组织代码的逻辑，例如pipeline的方法，不用将每一次的结果都用数据保存，不用函数嵌套，逻辑更清晰。
