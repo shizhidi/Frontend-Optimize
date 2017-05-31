@@ -85,7 +85,7 @@ JavaScript 脚本代码
   const asyncFunc = async () => await ajax.post();
   // ES6 写法
   // 暂时不支持箭头函数和generator一起的写法，辣鸡
-  const asyncFunc = function *() => yield ajax.post();
+  const asyncFunc = function *() { yield ajax.post(); }
   ```
 - 使用函数式编程的方法，能够更好的组织代码的逻辑，例如pipeline的方法，不用将每一次的结果都用数据保存，不用函数嵌套，逻辑更清晰。
   ```javascript
