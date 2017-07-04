@@ -411,6 +411,13 @@ HTML 标签
   * soft nofile 51200
   * hard nofile 51200
   ```
+- NPM 优化,在npm运行的根目录新建.npmrc文件，解决，node-sass登需要翻墙资源的兼容性问题
+  ```
+  sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+  phantomjs_cdnurl=https://npm.taobao.org/mirrors/phantomjs/
+  electron_mirror=https://npm.taobao.org/mirrors/electron/
+  registry=https://registry.npm.taobao.org
+  ```
 
 参考资料
 ---
