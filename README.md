@@ -35,7 +35,7 @@ Thanks
 
 硬件优化
 ---
-- 有时候我们需要在Android或者iOS的webview中编写Hybrid页面，iOS性能还可以，但是在Android手机中，性能就层次不齐，有时候弹窗都会很卡，这时候我们可以通过开启Android的硬件加速功能，提高页面整体的性能，详情可参考Google关于硬件加速的文档 https://developer.android.com/guide/topics/graphics/hardware-accel.html
+- 有时候我们需要在Android或者iOS的webview中编写Hybrid页面，iOS性能还可以，但是在Android手机中，性能就参差不齐了，有时候弹窗都会很卡，这时候我们可以通过开启Android的硬件加速功能，提高页面整体的性能，详情可参考Google关于硬件加速的文档 https://developer.android.com/guide/topics/graphics/hardware-accel.html
 - 可以使用React Native 或者 Weex 这种技术方案，直接用JS编写Native界面，从而避开webview性能问题
 
 Cache 缓存／Storage 存储
