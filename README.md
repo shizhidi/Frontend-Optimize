@@ -51,6 +51,7 @@ Thanks
   webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
   ```
 - 可以使用React Native 或者 Weex 这种技术方案，直接用JS编写Native界面，从而避开webview性能问题
+- iOS8 新增加了一个WKWebview，相对老的UIWebview性能得到了很好的提升，不过本人实际使用的时候，遇到了WKWebview Cookies共享问题，以及在Webview bounces 关闭的时候，fixed元素渲染失败等严重问题，需要大家关注。
 
 Cache 缓存／Storage 存储
 ---
